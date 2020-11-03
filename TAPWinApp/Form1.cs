@@ -105,6 +105,8 @@ namespace TAPWinApp
                 if (thumb != null)
                 {
                     // thumb.x, thumb.y, thumb.z ...
+                    Console.WriteLine("RawSensorData thumb" + identifier + ", code: " + thumb.x + "," + thumb.y + "," + thumb.z);
+                    this.LogLine("RawSensorData thumb" + identifier + ", code: " + thumb.x + "," + thumb.y + "," + thumb.z);
                 }
                 // Etc.. use indexes: RawSensorData.indexof_DEV_THUMB, RawSensorData.indexof_DEV_INDEX, RawSensorData.indexof_DEV_MIDDLE, RawSensorData.indexof_DEV_RING, RawSensorData.indexof_DEV_PINKY
             }
@@ -114,11 +116,20 @@ namespace TAPWinApp
                 if (gyro != null)
                 {
                     // gyro.x, gyro.y, gyro.z ...
+                    Console.WriteLine("RawSensorData gyro " + identifier + ", code: " + gyro.x + "," + gyro.y + "," + gyro.z);
+                    this.LogLine("RawSensorData gyro " + identifier + ", code: " + gyro.x + "," + gyro.y + "," + gyro.z);
                 }
                 // Etc.. use indexes: RawSensorData.indexof_IMU_GYRO, RawSensorData.indexof_IMU_ACCELEROMETER
             }
             
             // Please refer readme.md for more information
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            TAPManager.Instance.SetTapInputMode(TAPInputMode.RawSensor(new RawSensorSensitivity()));
+            Console.WriteLine("Turn to RawSensor mode");
+            this.LogLine("Turn to RawSensor mode");
         }
     }
 }
