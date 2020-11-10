@@ -16,10 +16,12 @@ namespace TAPWinApp
     {
 
         private bool once;
+        private bool rawMode;
 
         public Form1()
         {
             this.once = true;
+            this.rawMode = false;
             InitializeComponent();
             
         }
@@ -101,12 +103,12 @@ namespace TAPWinApp
         {
             // RawSensorData has a timestamp, type and an array of points(x,y,z)
             if (rsData.type == RawSensorDataType.Device) {
-                Point3 thumb = rsData.GetPoint(RawSensorData.indexof_DEV_THUMB);
+                Point3 thumb = rsData.GetPoint(RawSensorData.indexof_DEV_INDEX);
                 if (thumb != null)
                 {
                     // thumb.x, thumb.y, thumb.z ...
                     Console.WriteLine("RawSensorData thumb" + identifier + ", code: " + thumb.x + "," + thumb.y + "," + thumb.z);
-                    this.LogLine("RawSensorData thumb" + identifier + ", code: " + thumb.x + "," + thumb.y + "," + thumb.z);
+                    this.LogLine("RawSensorData thumb" + identifier + ", " + new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() + "," + thumb.x + "," + thumb.y + "," + thumb.z);
                 }
                 // Etc.. use indexes: RawSensorData.indexof_DEV_THUMB, RawSensorData.indexof_DEV_INDEX, RawSensorData.indexof_DEV_MIDDLE, RawSensorData.indexof_DEV_RING, RawSensorData.indexof_DEV_PINKY
             }
@@ -127,9 +129,19 @@ namespace TAPWinApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            TAPManager.Instance.SetTapInputMode(TAPInputMode.RawSensor(new RawSensorSensitivity()));
-            Console.WriteLine("Turn to RawSensor mode");
-            this.LogLine("Turn to RawSensor mode");
+            if (!this.rawMode)
+            {
+                TAPManager.Instance.SetTapInputMode(TAPInputMode.RawSensor(new RawSensorSensitivity()));
+                Console.WriteLine("Turn to RawSensor mode");
+                this.LogLine("Turn to RawSensor mode");
+            }
+            else
+            {
+                TAPManager.Instance.SetTapInputMode(TAPInputMode.Text());
+                Console.WriteLine("Turn to text mode");
+                this.LogLine("Turn to text mode");
+            }
+            this.rawMode = !this.rawMode;
         }
     }
 }
